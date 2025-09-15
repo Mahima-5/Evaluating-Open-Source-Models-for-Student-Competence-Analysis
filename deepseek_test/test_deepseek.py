@@ -19,7 +19,7 @@ class PythonEducator:
         self.model = AutoModelForCausalLM.from_pretrained(
             model_path,
             trust_remote_code=True,
-            dtype=torch.float32,  # Use dtype instead of torch_dtype
+            dtype=torch.float32,  
             low_cpu_mem_usage=True
         )
 
@@ -135,4 +135,5 @@ if __name__ == "__main__":
     print("\n=== ANALYSIS RESULTS ===")
     print("Errors:", analysis["errors"])
     print("Questions:", analysis["questions"])
+
     print("Hint:", analysis["hint"])
