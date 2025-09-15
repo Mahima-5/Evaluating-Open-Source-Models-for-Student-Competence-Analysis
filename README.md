@@ -1,62 +1,97 @@
-# Evaluating-Open-Source-Models-for-Student-Competence-Analysis
+# Evaluating Open-Source Models for Student Competence Analysis
 
-Research Plan
-Approach to Model Identification and Evaluation
-Our approach to identifying and evaluating relevant AI models for educational assessment begins with a comprehensive survey of open-source models specifically designed for code understanding and generation. We prioritize models that demonstrate strong performance on programming tasks while remaining computationally accessible for educational institutions. The evaluation criteria focus on several key dimensions: code comprehension accuracy (ability to correctly analyze Python syntax and semantics), pedagogical appropriateness (capacity to generate educationally useful feedback), misconception identification (skill at detecting common student errors), and resource requirements (computational cost and accessibility). We specifically examine the DeepSeek Coder 1.3B model as our primary candidate due to its balance between capability and practicality, testing it against a curated dataset of student code examples with varying complexity levels and common error patterns.
+## Project Overview
 
-To validate model applicability, we implement a structured testing framework that assesses both quantitative metrics (response relevance, error detection rate) and qualitative factors (educational value of generated prompts, appropriateness of hints). This involves creating benchmark tasks where the model analyzes student code, generates assessment questions, and provides constructive feedback. Validation occurs through both automated evaluation (measuring response quality against predetermined rubrics) and human assessment (having experienced Python educators rate the model's outputs for pedagogical effectiveness). The reasoning behind this approach is that effective competence assessment requires not just technical accuracy but also educational sensitivity, which necessitates a hybrid evaluation methodology combining computational metrics with human judgment.
+This project explores the potential of **open-source AI models** to analyze Python code written by students and provide meaningful feedback that assesses their conceptual understanding. The goal is to determine whether these models can:
 
-Testing Methodology and Decision Process
-Our testing methodology employs a multi-layered approach to assess model performance. First, we create a diverse dataset of student Python code samples representing common learning stages and misconception patterns. We then develop specific prompt templates that guide the model to analyze code, identify potential misunderstandings, generate probing questions, and offer constructive hints. Each model response is evaluated against criteria including: conceptual relevance to the programming concept being assessed, ability to uncover reasoning processes rather than just syntax errors, appropriateness for the student's apparent skill level, and effectiveness at encouraging deeper thinking without providing direct solutions. We particularly focus on whether the model can distinguish between syntactic errors and conceptual misunderstandings, which is crucial for high-level competence analysis.
+- Analyze student-written Python code for **logical and syntactic errors**.  
+- Generate **prompts that encourage conceptual understanding**.  
+- Identify **gaps in reasoning or misconceptions**.  
+- Encourage **deeper learning** without simply providing the solution.  
 
-The decision to focus on DeepSeek Coder 1.3B stems from its optimal balance between several competing factors: it is large enough to understand code semantics but small enough to be deployable in resource-constrained educational environments; it specializes in code rather than general language, making it more suitable for programming education; and it provides open weights that allow for customization and experimentation. Our reasoning acknowledges that while larger models might offer marginally better performance, their computational requirements and closed nature make them less practical for widespread educational use. We consciously accept the trade-off of slightly reduced accuracy for substantially improved accessibility and customizability, which aligns better with real-world educational constraints.
+For this project, **Python learning** is used as a test case. The system uses an open-source model, **[DeepSeek Coder 1.3B Base]([https://huggingface.co/deepseek-ai/deepseek-coder-1.3b-base])**, to analyze small Python functions and provide feedback including:
 
-Reasoning and Model Evaluation
-What makes a model suitable for high-level competence analysis?
-A model suitable for high-level competence analysis must possess several key characteristics: First, it needs deep understanding of the subject matter domain (Python programming concepts, in this case) rather than surface-level pattern recognition. Second, it must be able to reason about intent and conceptual understanding, not just identify syntax errors. Third, it should have pedagogical awareness—the ability to generate responses that guide learning without simply providing answers. Fourth, it needs to contextualize errors within a learning progression, recognizing which concepts are foundational and which are more advanced. Finally, it must balance specificity with generality, providing targeted feedback while recognizing multiple valid approaches to problems.
+- **Errors:** Points out potential issues or misconceptions in the student code.  
+- **Questions:** Prompts conceptual understanding without giving away solutions.  
+- **Hints:** Offers guidance to help students correct their code or understand concepts.  
 
-How would you test whether a model generates meaningful prompts?
-We would test prompt meaningfulness through a multi-method approach: (1) Automated evaluation using metrics like relevance scoring (comparing generated prompts to concept maps of Python knowledge), (2) Expert review by Python educators rating prompts on criteria like conceptual focus, appropriateness for level, and ability to provoke deeper thinking, (3) Student testing where learners interact with the prompts and we measure resulting learning gains or conceptual clarification, and (4) Comparison against validated assessment items from educational resources to ensure alignment with established pedagogical practices. Meaningful prompts should target specific conceptual understandings, be open-ended enough to allow for multiple reasoning paths, and avoid leading students toward particular solutions.
+This project demonstrates how AI models can be adapted for **educational assessment** while acknowledging both their potential and limitations in real-world learning contexts.
 
-What trade-offs might exist between accuracy, interpretability, and cost?
-Significant trade-offs exist between these dimensions: Larger models generally offer higher accuracy but at substantially increased computational cost and decreased interpretability (black-box nature). Smaller models like DeepSeek Coder 1.3B are more computationally efficient and somewhat more interpretable but may sacrifice some accuracy on complex reasoning tasks. Cost considerations include not just computational resources but also implementation time, maintenance requirements, and customization effort. In educational contexts, we often prioritize interpretability and cost over maximal accuracy, since educators need to understand and trust the assessment process, and schools typically have limited computational resources.
+---
 
-Why did you choose the model you evaluated, and what are its strengths or limitations?
-We selected DeepSeek Coder 1.3B for several reasons: It provides a practical balance between capability and accessibility, specializing in code understanding (unlike general-purpose LLMs), offering open weights for customization, and maintaining a manageable computational footprint. Its strengths include: Python-specific optimization, reasonable performance on code analysis tasks, relatively low resource requirements, and open accessibility for educational use. Limitations include: Occasional missing of subtle conceptual errors, limited context window for longer code samples, potential for generating incorrect or irrelevant responses, and the need for careful prompt engineering to maximize educational value. Despite these limitations, it represents a viable option for educational settings where larger models would be impractical.
+## Research Plan
 
-Setup and Installation
-bash
-# Clone the repository
-git clone https://github.com/your-username/python-competence-assessor.git
-cd python-competence-assessor
+### Approach and Evaluation
 
-# Install dependencies
-pip install torch transformers
+To evaluate AI models for assessing Python student code, I focused on freely available **open-source models** capable of understanding programming logic, particularly **DeepSeek Coder 1.3B Base**. The evaluation approach included multiple steps:
 
-# Run the assessment tool
-python educator.py
-Usage Example
-The repository includes sample student code in student_code.py that demonstrates common Python learning challenges. The main implementation in educator.py provides three key functions:
+1. **Model Selection:** Identifying models that can analyze code, generate prompts, and be deployed locally to avoid API costs.  
+2. **Prompt Design:** Creating structured prompts instructing the model to provide three sections: **errors**, **conceptual questions**, and **hints**, with explicit instructions to guide reasoning rather than provide full solutions.  
+3. **Testing & Validation:** Feeding representative Python snippets, such as functions using loops, accumulators, and basic arithmetic, and analyzing both **raw model output** and **parsed structured output** to assess correctness, clarity, and educational relevance.  
+4. **Iterative Refinement:** Adjusting prompt wording and parsing logic to handle inconsistent formatting, multi-line hints/questions, and cases where headers like `ERRORS:` might be missing.  
 
-analyze_student_code() - analyzes code and provides educational feedback
+The evaluation criteria included the model’s ability to identify logical or syntactic errors, generate meaningful conceptual questions that promote reasoning, and provide hints that encourage problem-solving without giving away direct solutions.
 
-generate_assessment_questions() - creates concept-specific questions
+---
 
-evaluate_code_completion() - tests ability to complete partial code
+### Reasoning, Suitability, and Observations
 
-Example usage:
+A model is considered suitable for **high-level competence analysis** if it can interpret Python code correctly, detect gaps in reasoning, and produce outputs that support conceptual learning. **DeepSeek Coder** was chosen because it demonstrates several key strengths:
 
-python
-from educator import PythonEducator
+- Understanding Python **loops, variables, and function logic**.  
+- Generating **actionable conceptual questions**.  
+- Providing **hints** that help students reason through problems.  
 
-educator = PythonEducator()
-analysis = educator.analyze_student_code(student_code, "loops")
-print("Educational assessment:", analysis)
-Project Structure
-text
-python-competence-assessor/
-├── test_deepseek.py              # Main implementation
-├── student_code.py          # Sample student code examples
-└── README.md               # This file
+Observations from testing show that the model can:
 
-This project demonstrates how open-source AI models can be adapted for educational assessment while acknowledging both their potential and limitations in real-world learning contexts.
+- Identify missing logic, such as the omission of division for averages.  
+- Pose meaningful questions about loops and accumulators.  
+- Give practical guidance without revealing answers directly.  
+
+**Trade-offs include:** occasional hallucinated errors (e.g., misidentifying correct variables), output inconsistencies requiring robust parsing, and slower CPU inference (~50–150 seconds per snippet).  
+
+To validate applicability, outputs were **manually inspected** and structured using parsing code, ensuring **errors**, **questions**, and **hints** were captured reliably. Overall, the model demonstrates strong potential for **educational assessment**, balancing **code understanding**, **conceptual prompting**, and **guided learning**, while highlighting the importance of **prompt design, parsing robustness, and careful evaluation** to maximize accuracy and interpretability.
+
+---
+
+## Setup Instructions
+
+1. **Clone the repository**
+
+        git clone https://github.com/Mahima-5/Evaluating-Open-Source-Models-for-Student-Competence-Analysis.git
+        cd deepseek_test
+
+2. **Set up a virtual environment**
+
+        python -m venv .venv
+        .venv\Scripts\activate   # Windows
+        ### OR
+        source .venv/bin/activate  # Linux/Mac
+
+
+3. **Install dependencies**
+
+        pip install torch transformers
+
+
+    - Download or specify the model path
+    
+    - Place DeepSeek Coder 1.3B Base in C:\models\ or any local path.
+    
+    - Download DeepSeek model from Hugging Face
+    
+    - Update model_path in test_deepseek.py if needed.
+
+4. **Run analysis**
+
+        python test_deepseek.py
+
+## References
+
+DeepSeek Coder 1.3B Base on Hugging Face[https://huggingface.co/deepseek-ai/deepseek-coder-1.3b-base]
+
+DeepSeek GitHub Repository[https://github.com/deepseek-ai/deepseek-coder]
+
+## Conclusion
+
+This project demonstrates that open-source LLMs like DeepSeek Coder can be adapted to assess Python code conceptually, providing meaningful feedback through errors, questions, and hints. While limitations exist—such as occasional hallucinated errors, inconsistent output formatting, and slower CPU inference—the model is promising for educational applications. With robust prompt design, parsing strategies, and careful evaluation, such AI models can support conceptual learning, identify reasoning gaps, and enhance student engagement in programming education.
